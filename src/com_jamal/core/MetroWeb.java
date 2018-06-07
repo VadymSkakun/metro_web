@@ -10,7 +10,6 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 public class MetroWeb {
     final static int WAGONS_IN_DEPOT = 100;
-    final static String NAMESPACE = "";
 
     LinkedList<Wagon> depot;
     HashSet<Train> trains;
@@ -25,8 +24,7 @@ public class MetroWeb {
 
     PrintWriter printWriter;
 
-    public MetroWeb(PrintWriter pw) throws IllegalArgumentException,IllegalStateException {
-
+    public MetroWeb(PrintWriter pw) {
         this.printWriter = pw;
         rnd = new Random();
         this.depot = new LinkedList<>();
@@ -42,7 +40,12 @@ public class MetroWeb {
         passengersInOutTrains();
     }
 
+    /**
+     * Creates trains from depot wagons using train.
+     * Adds ready train to trains collection.
+     */
     public void createTrains() {
+        //Filling of trains with wagons.
         for (int j = 0; j < depot.size() / 5; j++) {
             Train train = new Train("Train " + j, "#0" + j);
             while (!depot.isEmpty()) {
@@ -55,6 +58,9 @@ public class MetroWeb {
         }
     }
 
+    /**
+     * Creates wagons for depot collection. Approximate 30% of header wagons will be created.
+     */
     public void createWagons() {
         for (int i = 0; i < WAGONS_IN_DEPOT; i++) {
             Wagon wgn = new Wagon("Wagon_" + i, (rnd.nextInt(100) < 30));
@@ -62,6 +68,9 @@ public class MetroWeb {
         }
     }
 
+    /**
+     * Prints information about wagons.
+     */
     public void printWagons() {
         LinkedList<String> header = new LinkedList<>();
         LinkedList<LinkedList<String>> rows = new LinkedList<>();
@@ -75,6 +84,9 @@ public class MetroWeb {
         printTable("Wagons ", header, rows);
     }
 
+    /**
+     * Prints information about trains.
+     */
     public void printTrains() {
         LinkedList<String> header = new LinkedList<>();
         LinkedList<LinkedList<String>> rows = new LinkedList<>();
@@ -95,10 +107,12 @@ public class MetroWeb {
             rows.add(row);
         }
         printTable("Trains", header, rows);
-        // printTable("Trains"+header.size()+":"+rows.size()+":"+rows.getFirst().size(),
-        // header, rows);
+        printTable("Trains" + header.size() + ":" + rows.size() + ":" + rows.getFirst().size(), header, rows);
     }
 
+    /**
+     * Adds trains from trains collection to line trains.
+     */
     private void createLineTrains() {
         redLine.setLineTrains(new LinkedList<>());
         blueLine.setLineTrains(new LinkedList<>());
@@ -113,9 +127,11 @@ public class MetroWeb {
             if (iter.hasNext())
                 greenLine.lineTrains.add(iter.next());
         }
-
     }
 
+    /**
+     * Creates three lines. Adds them to allLines collection.
+     */
     private void createLines() {
         redLine = new Line("Red");
         blueLine = new Line("Blue");
@@ -126,6 +142,9 @@ public class MetroWeb {
         allLines.put("Green", greenLine);
     }
 
+    /**
+     * Prints queue in right order. Using a copy of queue to poll.
+     */
     public void printPriorityQueue(Queue<?> queue) {
         Queue<Driver> temp;
 
@@ -143,6 +162,10 @@ public class MetroWeb {
             System.out.println(temp.poll());
     }
 
+    /**
+     * Creates drivers and froms a driver queue from them.
+     * Comparator of queue is based on drivers experience.
+     */
     private void manageDriversQueue() {
         comparator = (o1, o2) -> {
 
@@ -175,6 +198,9 @@ public class MetroWeb {
         }
     }
 
+    /**
+     * Add stations to the lines(line station collection).
+     */
     private void createLineStations() {
         for (int i = 0; i < 10; i++) {
             redLine.lineStations.add(new Station(redLine.getName() + "Station " + i));
@@ -183,6 +209,10 @@ public class MetroWeb {
         }
     }
 
+    /**
+     * Runs train through line. Train stays at every station and let passengers go out and in.
+     * Train goes in separate thread.
+     */
     private void runTrainThread(Line line, Train train) {
         Random rnd = new Random();
         int cntToOperate = 0;
@@ -199,7 +229,6 @@ public class MetroWeb {
                         cntToOperate--;
                     }
                 }
-
                 while (wgn.getWagonPassengers().size() < Wagon.MAX_WAGON_CAPACITY
                         & station.getWaitingPassengers().size() > 0) {
                     try {
@@ -212,6 +241,9 @@ public class MetroWeb {
         }
     }
 
+    /**
+     * Add passengers to stations in thread.
+     */
     private void passengersEnterStations() {
         Random rnd = new Random();
 
@@ -230,6 +262,9 @@ public class MetroWeb {
         }
     }
 
+    /**
+     * Combine creating passengers and running all trains through stations.
+     */
     private void passengersInOutTrains() {
         passengersEnterStations();
         for (Line line : allLines.values()) {
@@ -241,6 +276,9 @@ public class MetroWeb {
         }
     }
 
+    /**
+     * Adds remaining passengers into HashMap for quick find and print passengers table.
+     */
     public void showPasssengersLeft() {
         LinkedList<String> header = new LinkedList<>();
         LinkedList<LinkedList<String>> rows = new LinkedList<>();
@@ -280,6 +318,9 @@ public class MetroWeb {
 
     }
 
+    /**
+     * Prints information about station of line with name of lineName.
+     */
     public void printLine(String lineName) {
         Line line = allLines.get(lineName);
         LinkedList<String> header = new LinkedList<>();
@@ -296,6 +337,9 @@ public class MetroWeb {
         }
     }
 
+    /**
+     * Prints a table.
+     */
     private void printTable(String name, LinkedList<String> header, LinkedList<LinkedList<String>> rows) {
         printWriter.println("<B>" + name + "</B>");
         printWriter.println("<table border=1>");
