@@ -7,17 +7,30 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.LinkedList;
 
+/*Class for line of metro*/
+
 @DatabaseTable(tableName = "lines")
 public class Line {
     @DatabaseField(generatedId = true)
     private Integer lineId;
+
+    /*Lines name*/
+
     @DatabaseField(useGetSet = true)
     private String name;
+
+    /*List of trains for line*/
+
     @ForeignCollectionField(eager = false)
     public ForeignCollection<Train> lineTrainsCollection;
+
     public LinkedList<Train> lineTrains;
+
+    /*List stations of line*/
+
     @ForeignCollectionField(eager = false)
     public ForeignCollection<Station> lineStationsCollection;
+
     public LinkedList<Station> lineStations;
 
     public Line() {
@@ -28,6 +41,8 @@ public class Line {
         lineStations = new LinkedList<>();
         lineTrains = new LinkedList<>();
     }
+
+    /*Add train to line*/
 
     public void addTrain(Train train) {
         this.lineTrains.add(train);

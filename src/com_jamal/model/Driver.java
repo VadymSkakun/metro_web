@@ -8,15 +8,27 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 
+/*Class for drivers*/
+
 @DatabaseTable(tableName = "drivers")
 public class Driver {
     @DatabaseField(generatedId = true)
     private Integer driverId;
+
+    /*Drivers name*/
+
     @DatabaseField(useGetSet = true)
     private String name;
+
+    /*Drivers current experience*/
+
     @DatabaseField(useGetSet = true)
     private int experience;
+
+    /*Current train*/
+
     private Train currentTrain;
+
     @ForeignCollectionField(eager = false)
     public ForeignCollection<Train> trains;
 
@@ -27,6 +39,9 @@ public class Driver {
         this.name = name;
         this.experience = experience;
     }
+
+    /*The driving process and experience recalculating.
+    Experience can be downgraded for one-threaded application purposes.*/
 
     public void doDrive() {
         Random rnd = new Random();
@@ -71,6 +86,8 @@ public class Driver {
     public void setDriverId(Integer driverId) {
         this.driverId = driverId;
     }
+
+    /*The driving process and experience recalculating in Thread.*/
 
     public Thread doThreadDrive(BlockingQueue<Driver> driverQueue) {
         Thread theThread = new Thread(new Runnable() {

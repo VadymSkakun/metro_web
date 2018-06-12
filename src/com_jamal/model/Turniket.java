@@ -7,17 +7,23 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.LinkedList;
 
+/*Class for showing passengers before turnstile of lobby */
+
 @DatabaseTable(tableName = "turniket")
 public class Turniket {
     @DatabaseField(generatedId = true)
     private int turniketId;
+
     @ForeignCollectionField(eager = false)
     public ForeignCollection<Passenger> turniketPassengersColl;
+
     public LinkedList<Passenger> turniketPassengers;
 
     public Turniket() {
         turniketPassengers = new LinkedList<>();
     }
+
+    /*Adds passengers to the list who are waiting before turnstile.*/
 
     public synchronized void addPassengers(int numberOfPassengers) {
         for (int i = 0; i < numberOfPassengers; i++) {
@@ -25,6 +31,8 @@ public class Turniket {
         }
         notifyAll();
     }
+
+    /*Prints Passengers who are waiting before turnstile.*/
 
     public StringBuffer printPassengers() {
         StringBuffer sb = new StringBuffer();

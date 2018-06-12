@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 public class LineSelector extends HttpServlet {
     static String line;
@@ -14,7 +15,12 @@ public class LineSelector extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        req.setCharacterEncoding("UTF-8");
+        try {
+            req.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         resp.setContentType("text/html;charset=UTF-8");
 
         if (req.getParameter("line") != null) {
@@ -27,7 +33,6 @@ public class LineSelector extends HttpServlet {
             metro = new MetroWeb(pw);
             metro.printLine(line);
         } catch (IllegalArgumentException | IllegalStateException e1) {
-
             e1.printStackTrace();
         }
     }

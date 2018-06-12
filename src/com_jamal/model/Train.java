@@ -7,19 +7,39 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.LinkedList;
 
+/*Class for Train of metro*/
+
 @DatabaseTable(tableName = "trains")
 public class Train {
+
     @DatabaseField(generatedId = true)
     private Integer trainId;
+
+    /*Max value of wagons in the train*/
+
     public static final byte MAX_NUMBER_OF_WAGONS = 5;
+
+    /*Name of Train*/
+
     @DatabaseField(useGetSet = true)
     private String name;
+
     private String number;
+
+    /*Line where train moves in*/
+
     private Line trainLine;
+
+    /*Can a train go in a line?*/
+
     @DatabaseField(useGetSet = true)
     public boolean readyToGo;
+
+    /*Trains driver*/
+
     @DatabaseField(columnName = "driverId", canBeNull = true, foreign = true, useGetSet = true)
     private Driver driver;
+
     public LinkedList<Wagon> wagonsList;
     @ForeignCollectionField(eager = false)
     public ForeignCollection<Wagon> wagons;
@@ -44,12 +64,16 @@ public class Train {
         return false;
     }
 
+    /*Is the first wagon the main one?*/
+
     private boolean hasTrailerWagon() {
         if (wagonsList.size() >= 1)
             if (wagonsList.getLast().isHeaderWagon())
                 return true;
         return false;
     }
+
+    /*Adding wagon to a train.*/
 
     public void addWagon(Wagon wagon) {
         if (this.wagonsList.size() < MAX_NUMBER_OF_WAGONS) {
@@ -68,10 +92,11 @@ public class Train {
             }
             wagon.setTrain(this);
             readyToGo = hasHeaderWagon() & hasTrailerWagon() & (this.wagonsList.size() == MAX_NUMBER_OF_WAGONS);
-
         } else
             System.out.println("Can't add more wagons!");
     }
+
+    /*Count quantity of passengers in train.*/
 
     public int getPassengersCount() {
         int cnt = 0;

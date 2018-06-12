@@ -22,7 +22,6 @@ public class TestMetroServlet extends HttpServlet {
             metro.printTrains();
             metro.showPasssengersLeft();
         } catch (IllegalArgumentException | IllegalStateException e1) {
-
             e1.printStackTrace();
         }
     }

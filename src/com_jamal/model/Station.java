@@ -8,18 +8,33 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/*class for Station of metro*/
+
 @DatabaseTable(tableName = "stations")
 public class Station {
     public static int MAX_NUMBER_OF_PASSENGERS = 500;
     @DatabaseField(generatedId = true)
     private Integer stationId;
+
+    /*Station name*/
+
     @DatabaseField(useGetSet = true)
     private String name;
+
+    /*list of Passengers on Station for DataBase*/
+
     @ForeignCollectionField(eager = false)
     public ForeignCollection<Passenger> waitingPassengersColl;
+
+    /*Queue of Passengers on Station*/
+
     private LinkedBlockingQueue<Passenger> waitingPassengers;
+
     @DatabaseField(columnName = "lineId", canBeNull = false, foreign = true, useGetSet = true)
     public Line line;
+
+    /*Turniket on the station*/
+
     private Turniket turniket;
 
     public Station() {

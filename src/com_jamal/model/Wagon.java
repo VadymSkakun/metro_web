@@ -7,18 +7,35 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.LinkedList;
 
+/*Class for wagons*/
+
 @DatabaseTable(tableName = "wagons")
 public class Wagon {
+
+    /*Max capacity of wagon*/
+
     public static final int MAX_WAGON_CAPACITY = 10;
+
     @DatabaseField(generatedId = true)
     private int wagonId;
+
+    /*Is the wagon the main one?*/
+
     @DatabaseField(useGetSet = true, columnName = "isHeader")
     private boolean isHeaderWagon;
+
+    /*Wagon name*/
+
     @DatabaseField(useGetSet = true)
     private String name;
+
+    /*List of Passengers in wagon*/
+
     LinkedList<Passenger> wagonPassengers;
+
     @ForeignCollectionField(eager = false)
     public ForeignCollection<Passenger> passengers;
+
     @DatabaseField(columnName = "trainId", canBeNull = true, foreign = true, useGetSet = true)
     public Train train;
 

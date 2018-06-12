@@ -3,13 +3,25 @@ package com_jamal.model;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+/*class for Passenger*/
+
 @DatabaseTable(tableName = "passengers")
 public class Passenger {
+
+    /*Internal counter for unique ID assign*/
+
     private static int ID_COUNTER = 0;
+
+    /*Passenger id*/
+
     @DatabaseField(generatedId = true)
     private Integer passengerId;
+
+    /*Passenger name*/
+
     @DatabaseField(useGetSet = true)
     private String name;
+
     @DatabaseField(columnName = "wagonId", canBeNull = false, foreign = true, useGetSet = true)
     public Wagon wagon;
     @DatabaseField(columnName = "stationId", canBeNull = false, foreign = true, useGetSet = true)

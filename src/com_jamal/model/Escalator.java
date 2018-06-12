@@ -7,11 +7,17 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/*Escalator that transfers Passengers from lobby to Station*/
+
 @DatabaseTable(tableName = "escalators")
 public class Escalator implements Runnable {
     @DatabaseField(generatedId = true)
     private Integer escalatorId;
+
     private Station station;
+
+    /*Escalator name*/
+
     @DatabaseField(useGetSet = true)
     private String name;
 
@@ -31,7 +37,13 @@ public class Escalator implements Runnable {
     @Override
     public void run() {
         Random random = new Random();
+
+        /*Constant for quantity of Passengers moved via Escalator*/
+
         final int escalatorMoved = 3;
+
+        /*Constant value time for threads sleep*/
+
         final int escalatorSleep = 1000;
 
         while (true) {
@@ -47,11 +59,14 @@ public class Escalator implements Runnable {
         }
     }
 
+    /*Move number of passengers from LinkedList to LinkedBlockingQueue.*/
+
     private int movePassengers(int numberOfPassengers, LinkedList<Passenger> listFrom,
                                LinkedBlockingQueue<Passenger> listTo) {
         int counter = 0;
 
         for (int i = 0; i < numberOfPassengers; i++) {
+            /*Locking source List*/
             synchronized (listFrom) {
                 if (!listFrom.isEmpty()) {
                     Passenger pass = listFrom.remove();
